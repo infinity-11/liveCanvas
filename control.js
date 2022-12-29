@@ -2,7 +2,7 @@ var replay;
 function interpret(commandText) {
 	let c = commandText;
 	let parts = c.split(" ");
-	let targetCommand = parts[0];
+	let targetCommand = parts[0].toLowerCase();
 	parts.splice(0, 1);
 	let args = parts;
 	for (var i = 0; i < args.length; i++) {

@@ -1,4 +1,154 @@
-// utility functions
+<html lang="en-ZA">
+	<head>
+		<script type="text/javascript" title="control.js">
+			var replay;
+function interpret(commandText) {
+	let c = commandText;
+	let parts = c.split(" ");
+	let targetCommand = parts[0].toLowerCase();
+	parts.splice(0, 1);
+	let args = parts;
+	for (var i = 0; i < args.length; i++) {
+		if (args[i].endsWith("PI")) {
+			let constant = args[i]
+			let coefficient = constant.substr(0, constant.indexOf("PI"));
+			coefficient = Number.parseFloat(coefficient);
+			if (!Number.isNaN(coefficient)) {
+				args[i] = coefficient*Math.PI;
+			}
+		} else if (args[i].endsWith("Deg")) {
+			let term = args[i]
+			let degree = term.substr(0, term.indexOf("Deg"));
+			degree = Number.parseFloat(degree);
+			if (!Number.isNaN(degree)) {
+				args[i] = degree*(Math.PI/180);
+			}
+		} else if (args[i].includes("SQRT")) {
+			let term = args[i];
+			let num = term.substr(term.indexOf("T") + 1, term.length);
+			let coeff = term.substr(0, term.indexOf("S"));
+			num = Number.parseFloat(num);
+			coeff = Number.parseFloat(coeff);
+			if (!Number.isNaN(num)) {
+				Number.isNaN(coeff) ? args[i] = Math.sqrt(num): args[i] = Math.sqrt(num) * coeff;
+			}
+		} else if (args[i].includes("$")) {
+			let r = args[i];
+			let reference = r.substr(1, r.length);
+			for (var v of variables.vars) {
+				if (reference == v.name) {
+					args[i] = v.value;
+				}
+			}
+		}
+	}
+	let returnVal;
+	if (targetCommand.startsWith(">>")) {
+		let theCommand = targetCommand.substr(2, targetCommand.length);
+		replay = [theCommand,
+			args];
+		returnVal = [theCommand,
+			args];
+	} else if (targetCommand == "<<") {
+		returnVal = replay;
+	} else {
+		returnVal = [targetCommand,
+			args];
+	}
+	return returnVal;
+}
+
+var variables = {
+	vars: [],
+	setVar: (nm, ve)=> {
+		let ks = [];
+		for (var v of variables.vars) {
+			ks.push(v.name);
+		}
+		if (!ks.includes(nm)) {
+			variables.vars.push({
+				name: nm, value: ve
+			});
+		} else {
+			let I = ks.indexOf(nm);
+			variables.vars[I].value = ve;
+		}
+	},
+	getVar: (nm)=> {
+		let ks = [];
+		for (var v of variables.vars) {
+			ks.push(v.name);
+		}
+		let I = ks.indexOf(nm);
+		if (I >= 0) {
+			return variables.vars[I].value;
+		} else {
+			return null;
+		}
+	},
+	clear: ()=> {
+		this.vars = [];
+	},
+}
+		</script>
+		<meta charset="UTF-8">
+		<meta name="description" content="Draw on this canvas using commands.">
+		<meta name="keywords" content="canvas,art">
+		<meta name="author" content="infinity-11">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style title="canvas.css">
+* {
+	font-family: Sans-Serif;
+	font-size: 12pt;
+}
+body {
+	padding: 0;
+	margin: 0;
+	max-width: 100%;
+	max-height: 100%;
+	background-image: linear-gradient(90deg,rgb(150,255,255),rgb(250,250,150));
+}
+div:not([abnormal]), canvas, p:not([abnormal]), input {
+	border: 1px solid black;
+	margin: 1%;
+	padding: 1%;
+	background-color: rgba(0,0,0,0);
+}
+canvas {
+	margin: 1%;
+	padding: 0;
+	border: 1px dashed blue;
+	background-color: white;
+}
+#hist {
+	overflow: scroll;
+}
+#nameTag {
+	border: 0px solid black;
+	margin: 1%;
+	padding: 1%;
+	color: white;
+	background-color: rgba(0,0,0,0.75);
+	font-size: 9pt;
+	text-align: center;
+}
+		</style>
+		<title>liveCanvas by javascriptboss</title>
+	</head>
+	<body>
+		<div>
+			<label for="command">Canvas command:</label><input type="text" placeholder="Command" id="command"><button type="button" id="enterButton">Enter</button>
+		</div>
+		<canvas id="canvas" style="margin: 1%; border: 1px solid black"></canvas>
+		<br>
+		<p id="dimens">Dimensions: </p>
+		<p id="hist">Executed commands:</p>
+		<footer>
+			<p id="nameTag" abnormal>liveCanvas by javascriptboss</p>
+		</footer>
+	</body>
+	<script type="text/javascript" title="canvas.js">
+		// utility functions
 const moveCursor = (x,y) => {
 	document.getElementById("canvas").getContext("2d").moveTo(x,y);
 };
@@ -194,3 +344,5 @@ document.addEventListener("keypress",()=>{
 		enterButton.click();
 	}
 });
+	</script>
+</html>

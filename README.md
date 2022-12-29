@@ -9,8 +9,6 @@ liveCanvas commands are written like this:
 *command argument1 argument2* ... *argumentN*  
 for example,   
 *moveTo 360 360*   
-liveCanvas commands are case sensitive. This means that small letter and capital letter forms are not the same.  
-For example, *stroke* is not the same as *StRoKE*.
 
 ## Supported commands
 liveCanvas currently accepts the following commands:
