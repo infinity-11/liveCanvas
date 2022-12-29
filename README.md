@@ -1,5 +1,8 @@
 # liveCanvas by javascriptboss
-liveCanvas is a webpage which takes a command (a function from the HTMLCanvasElement class) and renders it to an HTML Canvas element.
+liveCanvas is a webpage which takes a command (a function from the HTMLCanvasElement class) and renders it to an HTML Canvas element.  
+
+## Why I created this
+I created this simple project to learn more about the HTML tag \<canvas\> and to practise my HTML, CSS and JavaScript skills.  
 
 ## Syntax
 liveCanvas commands are written like this:      
@@ -38,13 +41,9 @@ end takes zero arguments. Therefore, arguments supplied here will not have any e
 (the syntax for this command is: *end*)
 ### stroke
 stroke executes the JavaScript canvas command stroke().  
-stroke renders the result of the previous path created by beginPath and closePath to the canvas.   
+stroke renders the result of the previous path created by beginPath and closePath to the canvas as a single connected line.   
 stroke takes zero arguments. Therefore, arguments supplied here will not have any effect.  
 (the syntax for this command is: *stroke*)
-#### ""
-Pressing the Enter button while there is no text in the input box will execute the stroke command.  
-In other words, the string "" is a shortcut command for stroke.  
-Wherever stroke is used, "" can be used instead.  
 ### clear
 clear executes the JavaScript canvas command clearRect().  
 clear is used to wipe the canvas clean of all drawings, rectangles, text, etc.  
@@ -113,10 +112,10 @@ arc takes five arguments: x, y, r, g and a.
 (the syntax for this command is: *arc x y r g a*)  
 x and y are the x-coordinate and y-coordinate, respectively, of the position of the arc's center.  
 r is the radius, or distance of the arc from the center.  
-g draws circle sectors instead of circles. When g is 0, this will draw a normal, full circle. When g is between 0 and 2π
-a is the length of the arc, ranging from 0, for no circle, to 2π (or 6.2831853071795) for a full circle.  
+g is the starting angle in radians, ranging from 0 to 2π (360°).
+a is the ending angle in radians, ranging from 0 to 2π (360°).  
 Example: *arc 200 200 50 0 6.2831853071795*   
-**Note: see the "Operators" section for information about inserting constants into commands.**
+**Note: see the "Operators" section for information about inserting angles into commands.**
 ### font
 font represents the JavaScript canvas property font.  
 font is used to set the font size of the text before drawing it.  
@@ -250,10 +249,8 @@ Co-ordinates are taken as the offset from the top left of the canvas.
 For example, an x-coordinate of 200 means that that position is 200 pixels away from the top left corner of the canvas.  
 Similarly, a y-coordinate of 350 means that that position is 300 pixels away from the top left of the canvas.  
 
-## Additional information 
-liveCanvas provides extra information in the form of text under the canvas.
-### Cursor position
-The current cursor position is shown here and updates when it moves.
+## Information boxes 
+liveCanvas provides extra information in the form of text boxes under the canvas.
 ### Dimensions
 The width and height of the canvas in pixels is shown here.  
 You can click on this to hide it (however, you cannot show it again).
@@ -269,7 +266,8 @@ This can be useful if you have to do the same thing many times.
 Save a command by putting *>>* before it, for example, 
 *>>moveTo 0 0*  
 Do not put a space between *>>* and the command name.  
-Don't do this:     *>> moveTo 0 0*.  
+Don't do this:  
+*>> moveTo 0 0*.  
 Note that a command saved using the replay operator is still executed when it is saved.  
 To execute the saved command, simply type *<<*.  
 Here is an example of the use of the replay operator:  
@@ -305,8 +303,14 @@ you can do this:
 *arc 0 0 $CircleRadius 0 6*  
 and the "Executed commands" list will show this:      
 *arc 0 0 100 0 6*  
-Referencing a variable which hasn't been created yet will result in the whole reference being treated as a string instead.
-### Pi
+Referencing a variable which hasn't been created yet will result in the whole reference being treated as a string instead.  
+### Degrees to radians  
+To insert a degree value into a command argument where an argument in radians is expected, you can use the *Deg* operator.  
+To do this, add the number of degrees before the *Deg*, like this: *360Deg*.  
+This is especially useful when using the arc command.  
+Angles are measured clockwise from the right.
+#### Pi
+***You don't need this anymore because of the new Deg operator.***  
 The constant π (3,1415926535897) can be inserted directly into commands.
 To do this, write ***x**PI*, where x is the coefficient you wish to multiply PI by.
 For example, writing *3PI* results in 9,4247779607693.
@@ -341,7 +345,3 @@ However, this is a valid command:
 *arc $centerX $centerY SQRT2 1PI 2PI*   
 You can use one operator per argument.  
 One exception to this is the *>>* operator. You can use the *>>* operator and have other operators in your command.  
-- Additionally, arguments should only consist of one value, or one operator.
-
-# Why I created this
-I created this simple project to learn more about the HTML tag \<canvas\> and to practise my HTML, CSS and JavaScript skills.

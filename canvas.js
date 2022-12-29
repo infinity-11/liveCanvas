@@ -1,7 +1,6 @@
 // utility functions
 const moveCursor = (x,y) => {
 	document.getElementById("canvas").getContext("2d").moveTo(x,y);
-	document.getElementById("pos").innerHTML = "Cursor position: "+x+","+y;
 };
 const setDimensions = (x,y) => {
 	document.getElementById("canvas").setAttribute("width",x);
@@ -48,9 +47,8 @@ enterButton.addEventListener("click",()=>{
 			case "resize":
 				setDimensions(args[0],args[1]);
 				break;
-			case "":
-				C.stroke();
-				usedCmd = "stroke";
+			case "fill":
+				C.fill();
 				break;
 			case "moveTo":
 				moveCursor(args[0],args[1]);
@@ -82,7 +80,8 @@ enterButton.addEventListener("click",()=>{
 				C.arc(...args);
 				break;
 			case "font":
-				C.font = args[0]+"px "+args[1];
+				let fontArg = args[0].endsWith("px") ? args[0]+" "+args[1] : args[0]+"px "+args[1];
+				C.font = fontArg;
 				break;
 			case "fillText":
 				let fillString = args.slice(2,args.length).join(" ") 
@@ -147,6 +146,16 @@ enterButton.addEventListener("click",()=>{
 				setDimensions(breadth,breadth);
 				C.clearRect(0,0,canvasElement.width,canvasElement.height);
 				usedCmd = SPECIAL.CLEAR;
+				break;
+			case "eval":
+				let code = args.join(" ");
+				try {
+					eval(code);
+				}
+				catch (E) {
+					window.alert(`Encountered error while executing code "${code}" \n${E.name}: ${E.message}`);
+					usedCmd = SPECIAL.FAILURE;
+				}
 				break;
 			default:
 				usedCmd = SPECIAL.FAILURE;
